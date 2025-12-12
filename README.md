@@ -4,7 +4,8 @@ WeakSets are awesome, but also have limitations.
 
 This library exposes a `WeakSet` class that utilizes weak references yet supports iteration, including `size`, `forEach()`, `entries()`, `keys()`, `values()` etc.
 
-Additionally, it allows you to mix objects and primitives and it just works. For primitives, it just works like a normal `Set`.
+Additionally, it allows you to mix objects and primitives and it just works.
+For primitives, it just works like a normal `Set`.
 
 ## How does it work?
 
