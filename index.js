@@ -1,16 +1,12 @@
 // Stubs to prevent breakage in older browsers
-const FinalizationRegistry = globalThis.FinalizationRegistry ?? class { register() { } };
 const WeakRef = globalThis.WeakRef ?? class {
 	constructor (value) { this.value = value; }
 	deref () { return this.value; }
 };
 
-export default class IterableWeakSet extends Set {
-	#registry = new FinalizationRegistry(ref => {
-		// Remove the WeakRef wrapper when its target is GC'd
-		super.delete(ref);
-	});
+let refs = new WeakMap();
 
+export default class IterableWeakSet extends Set {
 	constructor(iterable) {
 		super();
 
@@ -22,62 +18,30 @@ export default class IterableWeakSet extends Set {
 	}
 
 	add (value) {
-		let ref = value;
-
-		if (value && (typeof value === "object" || typeof value === "function")) {
-			ref = new WeakRef(value);
-
-			// Use WeakRef itself as unregister token
-			this.#registry.register(value, ref, ref);
-		}
-
-		return super.add(ref);
-	}
-
-	#getRef (value) {
-		if (super.has(value)) {
-			return null;
-		}
-
-		for (const ref of this.values()) {
-			if (ref instanceof WeakRef && ref.deref() === value) {
-				return ref;
-			}
-		}
-
-		return null;
-	}
-
-	#getValue (value) {
-		if (super.has(value)) {
-			return value;
-		}
-
-		return this.#getRef(value);
+		return super.add(getValueOrRef(value));
 	}
 
 	has (value) {
-		if (super.has(value)) {
-			return true;
-		}
-
-		return Boolean(this.#getRef(value));
+		return super.has(getExistingValueOrRef(value));
 	}
 
 	delete (value) {
-		return super.delete(this.#getValue(value));
+		return super.delete(getExistingValueOrRef(value));
 	}
 
 	*values () {
 		for (const ref of super.values()) {
-			const target = ref.deref();
+			let value = ref;
+			if (ref instanceof WeakRef) {
+				value = ref.deref();
 
-			if (target === undefined) {
-				super.delete(ref);
+				if (value === undefined) {
+					super.delete(ref);
+					continue;
+				}
 			}
-			else {
-				yield target;
-			}
+
+			yield value;
 		}
 	}
 
@@ -113,4 +77,32 @@ export default class IterableWeakSet extends Set {
 
 		return count;
 	}
+}
+
+
+function needsRef (value) {
+	return value && (typeof value === "object" || typeof value === "function");
+}
+
+function getExistingValueOrRef (value) {
+	if (needsRef(value)) {
+		return refs.get(value);
+	}
+
+	return value;
+}
+
+function getValueOrRef (value) {
+	if (needsRef(value)) {
+		let ref = refs.get(value);
+
+		if (!ref) {
+			ref = new WeakRef(value);
+			refs.set(value, ref);
+		}
+
+		return ref;
+	}
+
+	return value;
 }
