@@ -10,7 +10,7 @@ export default class IterableWeakSet extends Set {
 	constructor(iterable) {
 		super();
 
-		if (iterable != null) {
+		if (iterable) {
 			for (const value of iterable) {
 				this.add(value);
 			}
