@@ -1,5 +1,4 @@
-import WeakRefs from "./weakrefs.js";
-let refs = new WeakRefs();
+import * as refs from "./weakrefs.js";
 
 export default class IterableWeakSet extends Set {
 	constructor(iterable) {
