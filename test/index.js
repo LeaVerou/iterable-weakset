@@ -1,4 +1,4 @@
-import IterableWeakSet from "../index.js";
+import IterableWeakSet from "../src/index.js";
 import check from "htest.dev/check";
 
 let obj = {a: 1};
