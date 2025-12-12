@@ -1,0 +1,27 @@
+{
+  "name": "iterable-weakset",
+  "version": "0.0.1",
+  "description": "WeakSets are awesome, but also have limitations.",
+  "keywords": [
+    "weakset"
+  ],
+  "homepage": "https://github.com/LeaVerou/iterable-weakset#readme",
+  "bugs": {
+    "url": "https://github.com/LeaVerou/iterable-weakset/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LeaVerou/iterable-weakset.git"
+  },
+  "license": "MIT",
+  "author": "Lea Verou",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "htest"
+  },
+  "devDependencies": {
+    "htest.dev": "^0.0.20",
+    "release-it": "^19.1.0"
+  }
+}
