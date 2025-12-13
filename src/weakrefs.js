@@ -35,10 +35,6 @@ export function deref (value) {
 		return value.deref();
 	}
 
-	if (needsRef(value)) {
-		return get(value)?.deref();
-	}
-
 	return value;
 }
 
@@ -64,16 +60,15 @@ export function add (value) {
 
 /**
  * Checks if a value's weak reference is stale (the referenced object has been garbage collected).
- * @param {*} value - The value to check.
+ * @param {*} ref - The value to check.
  * @returns {boolean} True if the reference is stale, false otherwise (not garbage collected, not an object, not present).
  */
-export function isStale (value) {
-	if (!refs.has(value)) {
-		return false;
+export function isStale (ref) {
+	if (ref instanceof WeakRef) {
+		return ref.deref() === undefined;
 	}
 
-	let ref = refs.get(value);
-	return ref.deref() === undefined;
+	return false;
 }
 
 /**
