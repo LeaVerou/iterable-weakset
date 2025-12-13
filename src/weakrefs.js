@@ -31,6 +31,10 @@ export function get (value) {
  * @returns {*} The value itself or the dereferenced value.
  */
 export function deref (value) {
+	if (value instanceof WeakRef) {
+		return value.deref();
+	}
+
 	if (needsRef(value)) {
 		return get(value)?.deref();
 	}
