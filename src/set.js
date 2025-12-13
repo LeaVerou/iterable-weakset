@@ -30,7 +30,7 @@ export default class IterableWeakSet extends Set {
 				continue;
 			}
 
-			yield refs.get(ref);
+			yield refs.deref(ref);
 		}
 	}
 

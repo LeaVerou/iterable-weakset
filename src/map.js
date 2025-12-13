@@ -34,7 +34,7 @@ export default class IterableWeakMap extends Map {
 				continue;
 			}
 
-			yield refs.get(ref);
+			yield refs.deref(ref);
 		}
 	}
 

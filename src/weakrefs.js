@@ -26,6 +26,19 @@ export function get (value) {
 }
 
 /**
+ * Returns the value itself for primitives and dereferences it if it's a WeakRef.
+ * @param {WeakRef|*} value - The value to dereference.
+ * @returns {*} The value itself or the dereferenced value.
+ */
+export function deref (value) {
+	if (needsRef(value)) {
+		return get(value)?.deref();
+	}
+
+	return value;
+}
+
+/**
  * Gets the WeakRef for a value, creating one if it doesn't exist.
  * @param {*} value - The value to get or create a reference for.
  * @returns {WeakRef|*} The WeakRef instance if the value needs a ref, otherwise the value itself.
