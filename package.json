@@ -1,6 +1,6 @@
 {
   "name": "weak-iterables",
-  "version": "0.0.1",
+  "version": "0.0.0",
   "description": "Iterable versions of WeakSet and WeakMap",
   "keywords": [
     "weakset"
